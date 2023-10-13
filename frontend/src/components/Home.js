@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import Table from 'react-bootstrap/Table';
 import axios from "axios"
+import Form from 'react-bootstrap/Form';
+
 import Spinner from 'react-bootstrap/Spinner';
 import Pagination from 'react-bootstrap/Pagination';
 
 const Home = () => {
     const [data, setData] = useState([]);
-
+    const [search, setSearch] = useState('')
+    console.log(search)
     const [pageData, setPageData] = useState([]);
     const [page, setPage] = useState(1);
     const [pageCount, setPageCount] = useState(0);
@@ -47,6 +50,13 @@ const Home = () => {
         <>
             <div className="container">
                 <h1>User Data</h1>
+                <Form>
+                    <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+                        <Form.Label>search</Form.Label>
+                        <Form.Control type="email" placeholder="search" onChange={(e) => setSearch(e.target.value)} />
+                    </Form.Group>
+
+                </Form>
 
                 <div className='table_div mt-3'>
                     <Table striped bordered hover>
@@ -61,11 +71,12 @@ const Home = () => {
                         <tbody>
                             {
                                 pageData.length > 0 ?
-                                    pageData.map((element) => {
+                                    pageData.filter((item) => {
+                                        return search.toLowerCase() === '' ? item : item.title.toLowerCase().includes(search)
+                                    }).map((element) => {
                                         return (
                                             <>
                                                 <tr key={element.id}>
-
                                                     <td>{element.id}</td>
                                                     <td>{element.price}</td>
                                                     <td>{element.title}</td>
